@@ -8,17 +8,9 @@ const useInput = (validateValue) => {
     setEnteredValue(event.target.value);
   };
 
-  //   const emailInputChangeHandler = (event) => {
-  //     setEnteredEmail(event.target.value);
-  //   };
-
   const inputBlurHandler = (event) => {
     setIsTouched(true);
   };
-
-  //   const emailInputBlurHandler = (event) => {
-  //     setEnteredEmailTouched(true);
-  //   };
 
   const reset = () => {
     setEnteredValue("");
@@ -33,6 +25,7 @@ const useInput = (validateValue) => {
     hasError,
     valueChangeHandler,
     inputBlurHandler,
+    reset,
   };
 };
 
