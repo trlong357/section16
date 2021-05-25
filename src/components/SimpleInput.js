@@ -1,14 +1,14 @@
-import { useRef, useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const SimpleInput = (props) => {
   const nameInputRef = useRef();
-  const [enteredname, setEnteredName] = useState("");
+  const [enteredName, setEnteredName] = useState("");
   const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
-  const [enterNameTouched, setEnteredNameTouched] = useState(false);
+  const [enteredNameTouched, setEnteredNameTouched] = useState(false);
 
   useEffect(() => {
     if (enteredNameIsValid) {
-      console.log("valid name");
+      console.log("Name Input is valid!");
     }
   }, [enteredNameIsValid]);
 
@@ -16,29 +16,41 @@ const SimpleInput = (props) => {
     setEnteredName(event.target.value);
   };
 
+  const nameInputBlurHandler = () => {
+    setEnteredNameTouched(true);
+    if (enteredName.trim() === "") {
+      setEnteredNameIsValid(false);
+      return;
+    }
+  };
+
   const formSubmissionHandler = (event) => {
     event.preventDefault();
 
     setEnteredNameTouched(true);
 
-    if (enteredname.trim() === "") {
+    if (enteredName.trim() === "") {
       setEnteredNameIsValid(false);
       return;
     }
 
     setEnteredNameIsValid(true);
-    console.log(enteredname);
+
+    console.log(enteredName);
+
     const enteredValue = nameInputRef.current.value;
     console.log(enteredValue);
 
-    // nameInputRef.current.value = ""; => dont manipulate dom
+    // nameInputRef.current.value = '';DON'T MANIPULATE THE DOM
     setEnteredName("");
   };
-  const nameInputIsInvalid = !enteredNameIsValid && enterNameTouched;
 
-  const nameInputClasses = enteredNameIsValid
+  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
+
+  const nameInputClasses = nameInputIsInvalid
     ? "form-control invalid"
     : "form-control";
+
   return (
     <form onSubmit={formSubmissionHandler}>
       <div className={nameInputClasses}>
@@ -48,9 +60,12 @@ const SimpleInput = (props) => {
           type="text"
           id="name"
           onChange={nameInputChangeHandler}
-          value={enteredname}
+          onBlur={nameInputBlurHandler}
+          value={enteredName}
         />
-        {nameInputIsInvalid && <p className="error-text">Name not be empty.</p>}
+        {nameInputIsInvalid && (
+          <p className="error-text">Name must not be empty.</p>
+        )}
       </div>
       <div className="form-actions">
         <button>Submit</button>
